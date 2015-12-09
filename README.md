@@ -29,7 +29,7 @@ QQ群：475510094
 
 项目地址：https://github.com/secken/Secken-Server-SDK-For-Java
 
-洋葱SDK产品服务端SDK主要包含三个方法：
+洋葱SDK产品服务端SDK主要包含四个方法：
 * 获取二维码的方法（GetYangAuthQrCode），用于获取二维码内容和实现绑定。
 * 请求推送验证的方法（AskYangAuthPush），用于发起对用户的推送验证操作。
 * 查询事件结果的方法（CheckYangAuthResult），用于查询二维码登录或者推送验证的结果。
@@ -37,7 +37,7 @@ QQ群：475510094
 
 ## 安装使用（Install & Get Started）
 
-To install Secken.Private.ServerSdk, import these packages
+To install Secken.Private.ServerSdk, Import these packages
 
 ```
 import java.io.UnsupportedEncodingException;
@@ -65,6 +65,7 @@ import secken.sdk.exceptions.SeckenSignatureVerifyException;
 // 需要去洋葱开发者中心新建一个类型为SDK的应用，创建完成之后，将对应的AppId+AppKey填过来
 public static final String APP_ID = "";
 public static final String APP_KEY = "";
+// 初始化调用实例
 public static SeckenApi api = new SeckenApi(APP_ID, APP_KEY);
 ```
 
@@ -90,13 +91,28 @@ GetYangAuthQrCode接口包含一个必传参数：AuthType；两个可选参数�
 
 ## 查询验证事件的结果（Check YangAuth Result）
 ```
-var thisSeckenReqId = new SeckenReqId("");
+// 事件ID
+var requestEventId = "";
+// 事件请求类
+var thisSeckenReqId = new SeckenReqId(requestEventId);
 // 等待成功返回结果
-SeckenId id = waitResult(qr.getEvent());
+SeckenId thisSeckenResult = waitResult(qr.getEvent());
 // 打印输出
-System.out.println(id.toString());
+System.out.println(thisSeckenResult.toString());
+
+public static SeckenId waitResult(SeckenReqEvent event)
+			throws InterruptedException, SeckenSignatureVerifyException {
+		while (true) {
+			SeckenId resp = (SeckenId) api.getResult(event);
+			System.out.println(resp.toString());
+			Thread.sleep(5000);
+			if (resp.getStatus() == 200) {
+				return resp;
+			}
+		}
+	}
 ```
-CheckYangAuthResult接口包含一个必传参数，RequestEventId。
+CheckYangAuthResult接口包含一个必传参数，thisEventId。
 
 |    状态码   | 		状态详情 		  |
 |:----------:|:-----------------:|
@@ -120,7 +136,7 @@ var thisUid = "";
 // 请求类
 var thisSeckenReqId = new SeckenReqId(thisUid);
 // 一键推送验证
-SeckenEvent event = api.realtimeAuth(AuthType.CLICK,new SeckenReqId(""));
+SeckenEvent event = api.realtimeAuth(AuthType.CLICK,thisSeckenReqId);
 // 打印输出
 System.out.println(event.toString());
 ```
