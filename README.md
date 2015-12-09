@@ -29,7 +29,7 @@ QQ群：475510094
 
 项目地址：https://github.com/secken/Secken-Server-SDK-For-Java
 
-洋葱公有云服务端SDK主要包含三个方法：
+洋葱SDK产品服务端SDK主要包含三个方法：
 * 获取二维码的方法（GetYangAuthQrCode），用于获取二维码内容和实现绑定。
 * 请求推送验证的方法（AskYangAuthPush），用于发起对用户的推送验证操作。
 * 查询事件结果的方法（CheckYangAuthResult），用于查询二维码登录或者推送验证的结果。
