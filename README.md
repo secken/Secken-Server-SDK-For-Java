@@ -72,12 +72,12 @@ public static SeckenApi api = new SeckenApi(APP_ID, APP_KEY);
 ## 获取二维码内容并发起验证事件（Get YangAuth QrCode）
 ```
 // 获得验证二维码地址及数据
-SeckenQr qr = api.getAuth();
+SeckenQr thisSeckenQrResult = api.getAuth(AuthType.CLICK);
 // 打印输出
-System.out.println(qr.toString());
+System.out.println(thisSeckenQrResult.toString());
 ```
 
-GetYangAuthQrCode接口包含一个必传参数：AuthType；两个可选参数：ActionType、ActionDetail。
+GetYangAuthQrCode接口包含一个必传参数，AuthType; 三个可选参数：ActionType、ActionDetail、Callback。
 
 |    状态码   | 		状态详情 		  |
 |:----------:|:-----------------:|
@@ -92,13 +92,13 @@ GetYangAuthQrCode接口包含一个必传参数：AuthType；两个可选参数�
 ## 查询验证事件的结果（Check YangAuth Result）
 ```
 // 事件ID
-String requestEventId = "";
+String thisEventId = "";
 // 事件请求类
-SeckenReqEvent thisSeckenReqId = new SeckenReqEvent(requestEventId);
+SeckenReqEvent thisSeckenReqEvent = new SeckenReqEvent(thisEventId);
 // 等待成功返回结果
-SeckenId thisSeckenResult = waitResult(qr.getEvent());
+SeckenId thisCheckYcAuthResult = waitResult(thisSeckenReqEvent);
 // 打印输出
-System.out.println(thisSeckenResult.toString());
+System.out.println(thisCheckYcAuthResult.toString());
 
 public static SeckenId waitResult(SeckenReqEvent event)
 			throws InterruptedException, SeckenSignatureVerifyException {
@@ -112,7 +112,7 @@ public static SeckenId waitResult(SeckenReqEvent event)
 		}
 	}
 ```
-CheckYangAuthResult接口包含一个必传参数，thisEventId。
+CheckYangAuthResult接口包含一个必传参数，EventId。
 
 |    状态码   | 		状态详情 		  |
 |:----------:|:-----------------:|
@@ -134,11 +134,11 @@ CheckYangAuthResult接口包含一个必传参数，thisEventId。
 // 用户ID
 String thisUid = "";
 // 请求类
-String thisSeckenReqId = new SeckenReqEvent(thisUid);
+SeckenReqId thisSeckenReqId = new SeckenReqId(thisUid);
 // 一键推送验证
-SeckenEvent event = api.realtimeAuth(AuthType.CLICK,thisSeckenReqId);
+SeckenEvent thisAskYcAuthPushResult = api.realtimeAuth(AuthType.CLICK,thisSeckenReqId);
 // 打印输出
-System.out.println(event.toString());
+System.out.println(thisAskYcAuthPushResult.toString());
 ```
 AskYangAuthPush接口包含两个必传参数：AuthType、UserId；两个可选参数：ActionType、ActionDetail。  
 
@@ -158,11 +158,11 @@ AskYangAuthPush接口包含两个必传参数：AuthType、UserId；两个可选
 // 准备AuthToken
 String thisAuthToken = "";
 // 复验验证结果
-SeckenSignature resp = api.queryAuthToken(thisAuthToken);
+SeckenSignature thisCheckYcAuthTokenResult = api.queryAuthToken(thisAuthToken);
 // 打印输出
-System.out.println(event.toString());
+System.out.println(thisCheckYcAuthTokenResult.toString());
 ```
-CheckYangAuthToken接口包含一个必传参数：ThisRequestServerSdkKey、AuthToken。  
+CheckYangAuthToken接口包含一个必传参数：AuthToken。  
 
 |    状态码   | 		状态详情 		  |
 |:----------:|:-----------------:|
